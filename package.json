@@ -1,0 +1,29 @@
+{
+  "name": "aibtc-mcp-remote",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Keyless remote MCP server for AIBTC (mcp.aibtc.com)",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "types": "wrangler types",
+    "typecheck": "wrangler types --check && tsc --noEmit",
+    "test": "vitest run"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "@aibtc/mcp-server": "1.73.1",
+    "@modelcontextprotocol/server": "^2.2.0",
+    "axios": "^1.20.0",
+    "zod": "^4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.3",
+    "wrangler": "^4.145.0"
+  }
+}

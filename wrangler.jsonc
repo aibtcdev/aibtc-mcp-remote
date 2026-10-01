@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "aibtc-mcp-remote",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "routes": [{ "pattern": "mcp.aibtc.com", "custom_domain": true }],
+  // @aibtc/mcp-server reads package.json via createRequire(import.meta.url),
+  // which has no file URL in a bundle; the shim serves it from the bundle.
+  "alias": {
+    "module": "./shims/module.js",
+    "node:module": "./shims/module.js"
+  },
+  "observability": { "enabled": true },
+  "vars": { "NETWORK": "mainnet" }
+}
