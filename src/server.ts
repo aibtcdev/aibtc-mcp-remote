@@ -14,7 +14,6 @@ import { redactSensitive } from "@aibtc/mcp-server/dist/utils/redact.js";
 import { REMOTE_TOOLS } from "./tools.js";
 import { registerAgentTools } from "./agents.tools.js";
 
-export const MCP_PATH = "/mcp";
 const MAX_BODY_BYTES = 1024 * 1024;
 
 const INSTRUCTIONS = [
@@ -55,7 +54,7 @@ function json(status: number, payload: unknown): Response {
   });
 }
 
-/** Fetch-style app: `/mcp` (MCP Streamable HTTP) and `/health`. */
+/** Fetch-style app: `/` (MCP Streamable HTTP) and `/health`. */
 export function createRemoteApp(version: string): {
   fetch: (request: Request) => Promise<Response>;
   close: () => Promise<void>;
@@ -70,8 +69,8 @@ export function createRemoteApp(version: string): {
       if (pathname === "/health" && request.method === "GET") {
         return json(200, { ok: true, version, network: NETWORK });
       }
-      if (pathname !== MCP_PATH) {
-        return json(404, { error: "Not found. The MCP endpoint is /mcp." });
+      if (pathname !== "/") {
+        return json(404, { error: "Not found. The MCP endpoint is /." });
       }
       return handler.fetch(request);
     },
