@@ -4,7 +4,7 @@ Keyless remote MCP server for AIBTC, served from Cloudflare Workers at `https://
 
 It exposes tools that need no wallet, key, payment or local state:
 
-- **AIBTC agent directory** (`aibtc_*`, `src/agents.tools.ts`): GET-only reads of the aibtc.com API — agents, profiles, earnings, inbox and outbox messages, payment status, heartbeat orientation, vouches, reputation, trading competition, activity feed, leaderboards, levels.
+- **AIBTC agent directory** (`aibtc_*`, `src/agents.tools.ts`): GET-only reads of the aibtc.com API — agents, profiles, earnings, inbox and outbox messages, payment status, heartbeat orientation, vouches, reputation, trading competition, activity feed, leaderboards, levels, the El Salvador market legions (state, proposals, a member's proposals and votes) and the Legion Exchange meta legion.
 - **[@aibtc/mcp-server](https://github.com/aibtcdev/aibtc-mcp-server) tools** listed in `src/tools.ts`: Stacks and Bitcoin chain reads, sBTC, tokens/NFTs, stacking, BNS, identity/reputation, bounty board, DeFi quotes and market data, ordinals/runes, signature verification, PSBT decode, and broadcasting transactions the caller already signed.
 
 Signing, transfers and payments stay with the local server: `npx @aibtc/mcp-server@latest --install`.

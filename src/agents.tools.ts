@@ -2,8 +2,9 @@
  * AIBTC agent directory tools.
  *
  * GET-only reads of the public aibtc.com API: agent profiles, levels, earnings,
- * inbox/outbox, vouches, reputation, trading competition, network activity and
- * leaderboards. No authentication, no signing, no payment. The host is fixed;
+ * inbox/outbox, vouches, reputation, trading competition, network activity,
+ * leaderboards, the El Salvador market legions and the meta legion. No
+ * authentication, no signing, no payment. The host is fixed;
  * caller input only fills validated path segments and query parameters.
  */
 import { McpServer } from "@modelcontextprotocol/server";
@@ -40,6 +41,23 @@ async function getJson(
 }
 
 const seg = encodeURIComponent;
+
+/** Fields of GET /api/legions the legion tools read. */
+interface LegionsState {
+  tip: number | null;
+  sides: Record<
+    "yes" | "no",
+    {
+      members: { who: string }[];
+      proposals: {
+        proposalId: number;
+        proposer: string;
+        title: string;
+        votes: { voter: string }[];
+      }[];
+    }
+  >;
+}
 
 export function registerAgentTools(server: McpServer): void {
   const read = <T extends z.ZodRawShape>(
@@ -204,6 +222,62 @@ export function registerAgentTools(server: McpServer): void {
     "Platform earnings totals and the top-100 agents by verified on-chain earnings.",
     { window: z.enum(["7d", "30d", "lifetime"]).optional().describe("Default lifetime") },
     ({ window }) => getJson("stats/earnings", { window })
+  );
+
+  read(
+    "aibtc_legions",
+    "El Salvador PoX-5 bond market legions (aibtc.com/legions): the market, and for each side (yes = Bonded, no = Idle) its rules, vault, settlement, eligibility, proposals with phase/tally/predicted outcome, members with live weight, and the event feed. `side` returns only that side.",
+    { side: z.enum(["yes", "no"]).optional() },
+    async ({ side }) => {
+      const data = (await getJson("legions")) as LegionsState;
+      return side ? { ...data, sides: { [side]: data.sides[side] } } : data;
+    }
+  );
+
+  read(
+    "aibtc_legion_proposal",
+    "One proposal in an El Salvador market legion: proposer, title, link, description, payout, vote window, yes/no weight, every vote with rationale, phase, status and predicted outcome.",
+    {
+      side: z.enum(["yes", "no"]),
+      proposalId: z.number().int().min(0),
+    },
+    async ({ side, proposalId }) => {
+      const data = (await getJson("legions")) as LegionsState;
+      const proposal = data.sides[side].proposals.find((p) => p.proposalId === proposalId);
+      if (!proposal) throw new Error(`No proposal ${proposalId} on the ${side} legion`);
+      return { tip: data.tip, proposal };
+    }
+  );
+
+  read(
+    "aibtc_legion_member",
+    "An address's activity in the El Salvador market legions, per side: its member row (live weight, proposal and vote counts), the proposals it made, and the votes it cast with rationale.",
+    { stxAddress },
+    async ({ stxAddress }) => {
+      const data = (await getJson("legions")) as LegionsState;
+      const perSide = Object.fromEntries(
+        Object.entries(data.sides).map(([name, s]) => [
+          name,
+          {
+            member: s.members.find((m) => m.who === stxAddress) ?? null,
+            proposals: s.proposals.filter((p) => p.proposer === stxAddress),
+            votes: s.proposals.flatMap((p) =>
+              p.votes
+                .filter((v) => v.voter === stxAddress)
+                .map((v) => ({ proposalId: p.proposalId, title: p.title, ...v }))
+            ),
+          },
+        ])
+      );
+      return { address: stxAddress, tip: data.tip, sides: perSide };
+    }
+  );
+
+  read(
+    "aibtc_meta_legion",
+    "Legion Exchange v2 (meta legion): terms, epoch scoreboard, the meta legion and every legion with its YES/NO share market, open orders and the event feed.",
+    {},
+    () => getJson("meta-legion")
   );
 
   read(
