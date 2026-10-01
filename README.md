@@ -28,6 +28,18 @@ npm run deploy     # wrangler deploy (custom domain mcp.aibtc.com)
 
 Run `npm run types` after changing `wrangler.jsonc`.
 
+## Secrets
+
+| Name | Purpose |
+|------|---------|
+| `HIRO_API_KEY` | Hiro API key for Stacks reads (balances, contracts, BNS, transactions). Without it, requests use Hiro's anonymous rate limit from Cloudflare's shared egress IPs. |
+
+```bash
+npx wrangler secret put HIRO_API_KEY
+```
+
+For `npm run dev`, put it in `.dev.vars` (gitignored): `HIRO_API_KEY=...`.
+
 ## How it works
 
 - `src/worker.ts` loads `src/server.ts` on the first request: `@aibtc/mcp-server` pulls in the Spark SDK, which generates random values at module load, and Workers only allows that inside a handler.
