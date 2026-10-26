@@ -33,12 +33,14 @@ Run `npm run types` after changing `wrangler.jsonc`.
 | Name | Purpose |
 |------|---------|
 | `HIRO_API_KEY` | Hiro API key for Stacks reads (balances, contracts, BNS, transactions). Without it, requests use Hiro's anonymous rate limit from Cloudflare's shared egress IPs. |
+| `UNISAT_API_KEY` | Unisat indexer key for the Bitcoin UTXO, inscription and rune reads (`get_cardinal_utxos`, `get_ordinal_utxos`, `get_inscriptions_by_address`, `get_rune_balances`, `get_rune_utxos`, `souldinals_*`). Without it, every one of those tools returns Unisat's `403 ... exceeded the request limit for unauthenticated requests` once the shared free quota is spent (#2). |
 
 ```bash
 npx wrangler secret put HIRO_API_KEY
+npx wrangler secret put UNISAT_API_KEY
 ```
 
-For `npm run dev`, put it in `.dev.vars` (gitignored): `HIRO_API_KEY=...`.
+For `npm run dev`, put them in `.dev.vars` (gitignored): `HIRO_API_KEY=...` and `UNISAT_API_KEY=...`.
 
 ## How it works
 
