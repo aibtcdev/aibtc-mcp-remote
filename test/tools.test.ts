@@ -30,6 +30,18 @@ describe("remote tool allowlist", () => {
     expect([...REMOTE_TOOLS].filter((n) => forbidden.test(n) || SPEND_TOOLS.has(n))).toEqual([]);
   });
 
+  // A new or removed upstream tool must be a reviewed decision, not a silent one.
+  // registerTool drops any name missing from REMOTE_TOOLS, so a bump that adds
+  // keyless tools would otherwise ship without them while CI stays green.
+  // When this fails after a bump: classify each new name in src/tools.ts (add it
+  // to REMOTE_TOOLS, or to "Not listed, with the reason"), then run
+  // `npx vitest run -u` and commit test/upstream-tools.txt. In CI, Vitest never
+  // writes snapshots, so a mismatch fails the run.
+  it("upstream tool list matches the reviewed snapshot", async () => {
+    const names = [...allToolNames()].sort().join("\n") + "\n";
+    await expect(names).toMatchFileSnapshot("./upstream-tools.txt");
+  });
+
   it("registers exactly the allowlist plus the agent directory tools", () => {
     const agentTools = namesRegisteredBy(registerAgentTools);
     const all = allToolNames();
