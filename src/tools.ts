@@ -234,6 +234,7 @@ export const EXCLUDED_TOOLS: ReadonlySet<string> = new Set([
   "execute_x402_endpoint",
   "send_inbox_message",
   "send_inbox_message_direct",
+  "inbox_auto_reply",
   "stack_stx",
   "extend_stacking",
   "unstake_stx",
@@ -392,6 +393,7 @@ export const EXCLUDED_TOOLS: ReadonlySet<string> = new Set([
   "nonce_health",
   "tx_status_deep",
   "arxiv_list_digests",
+  "inbox_auto_reply_configure",
   // Fetch a caller-supplied URL or relay
   "probe_x402_endpoint",
   "nostr_read_feed",
