@@ -3,7 +3,7 @@ import { McpServer } from "@modelcontextprotocol/server";
 import { registerAllTools } from "@aibtc/mcp-server/dist/tools/index.js";
 import { ALL_TOOLS } from "@aibtc/mcp-server/dist/tools/profiles.js";
 import { SPEND_TOOLS } from "@aibtc/mcp-server/dist/tools/bounty-hint.js";
-import { REMOTE_TOOLS } from "../src/tools.js";
+import { REMOTE_TOOLS, EXCLUDED_TOOLS } from "../src/tools.js";
 import { createRemoteServer } from "../src/server.js";
 import { registerAgentTools } from "../src/agents.tools.js";
 
@@ -23,6 +23,14 @@ describe("remote tool allowlist", () => {
   it("names only tools that exist", () => {
     const all = allToolNames();
     expect([...REMOTE_TOOLS].filter((n) => !all.has(n))).toEqual([]);
+  });
+
+  it("classifies every upstream tool as allowed or excluded, never both", () => {
+    const all = allToolNames();
+    const unclassified = [...all].filter((n) => !REMOTE_TOOLS.has(n) && !EXCLUDED_TOOLS.has(n));
+    expect(unclassified, "add each new upstream tool to REMOTE_TOOLS or EXCLUDED_TOOLS in src/tools.ts").toEqual([]);
+    expect([...EXCLUDED_TOOLS].filter((n) => !all.has(n))).toEqual([]);
+    expect([...EXCLUDED_TOOLS].filter((n) => REMOTE_TOOLS.has(n))).toEqual([]);
   });
 
   it("excludes wallet, signing, spending and local-state tools", () => {

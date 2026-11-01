@@ -51,6 +51,6 @@ For `npm run dev`, put them in `.dev.vars` (gitignored): `HIRO_API_KEY=...` and 
 
 ## Adding a tool
 
-From `@aibtc/mcp-server`: add it to `REMOTE_TOOLS` only if it works with no wallet (never reaches `getWalletAddress()` / `getAccount()` when its inputs are given), never signs or pays, reads no `~/.aibtc` state, and fetches no caller-supplied URL. `test/tools.test.ts` checks the list against the registry, so a renamed or removed upstream tool fails the build.
+From `@aibtc/mcp-server`: add it to `REMOTE_TOOLS` only if it works with no wallet (never reaches `getWalletAddress()` / `getAccount()` when its inputs are given), never signs or pays, reads no `~/.aibtc` state, and fetches no caller-supplied URL; otherwise add it to `EXCLUDED_TOOLS` under its reason. `test/tools.test.ts` requires every upstream tool to be in exactly one of the two sets, so a bump that adds, renames or removes a tool fails the build until it is classified.
 
 After bumping `@aibtc/mcp-server`, run the tests and `npm run dev` before deploying.
