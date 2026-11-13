@@ -16,7 +16,7 @@
   },
   "packageManager": "npm@10.9.0",
   "dependencies": {
-    "@aibtc/mcp-server": "1.79.0",
+    "@aibtc/mcp-server": "1.79.3",
     "@modelcontextprotocol/server": "^2.2.0",
     "axios": "^1.20.0",
     "zod": "^4.6.5"
