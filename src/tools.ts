@@ -74,6 +74,7 @@ export const REMOTE_TOOLS: ReadonlySet<string> = new Set([
   "bounty_list",
   "bounty_get",
   "bounty_submissions",
+  "bounty_pending_invites", // team invites for a btc_address the caller passes in
   "taskmarket_search",
   "taskmarket_get",
   "taskmarket_submissions",
@@ -330,6 +331,8 @@ export const EXCLUDED_TOOLS: ReadonlySet<string> = new Set([
   "bounty_accept",
   "bounty_paid",
   "bounty_cancel",
+  "bounty_team_confirm", // signs with the wallet key (BIP-322)
+  "bounty_team_remove", // signs with the wallet key (BIP-322)
   "inference_register_provider",
   "inference_update_provider",
   "inference_reveal_key",
