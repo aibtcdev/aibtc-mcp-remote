@@ -74,6 +74,9 @@ export const REMOTE_TOOLS: ReadonlySet<string> = new Set([
   "bounty_list",
   "bounty_get",
   "bounty_submissions",
+  // address is an input; with it omitted upstream falls back to the active wallet, which errors here
+  // (same shape as get_stx_balance)
+  "bounty_pending_invites",
   "taskmarket_search",
   "taskmarket_get",
   "taskmarket_submissions",
@@ -330,6 +333,8 @@ export const EXCLUDED_TOOLS: ReadonlySet<string> = new Set([
   "bounty_accept",
   "bounty_paid",
   "bounty_cancel",
+  "bounty_team_confirm",
+  "bounty_team_remove",
   "inference_register_provider",
   "inference_update_provider",
   "inference_reveal_key",
