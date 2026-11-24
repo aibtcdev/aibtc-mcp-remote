@@ -330,6 +330,8 @@ export const EXCLUDED_TOOLS: ReadonlySet<string> = new Set([
   "bounty_accept",
   "bounty_paid",
   "bounty_cancel",
+  "bounty_team_confirm",
+  "bounty_team_remove",
   "inference_register_provider",
   "inference_update_provider",
   "inference_reveal_key",
@@ -347,6 +349,7 @@ export const EXCLUDED_TOOLS: ReadonlySet<string> = new Set([
   "ordinals_p2p_my_trades",
   "bounty_my_posted",
   "bounty_my_submissions",
+  "bounty_pending_invites",
   // Pillar smart wallet: browser handoff session, Pillar key or active wallet
   "pillar_connect",
   "pillar_disconnect",
