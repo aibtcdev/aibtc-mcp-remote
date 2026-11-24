@@ -74,6 +74,7 @@ export const REMOTE_TOOLS: ReadonlySet<string> = new Set([
   "bounty_list",
   "bounty_get",
   "bounty_submissions",
+  "bounty_pending_invites",
   "taskmarket_search",
   "taskmarket_get",
   "taskmarket_submissions",
@@ -349,7 +350,6 @@ export const EXCLUDED_TOOLS: ReadonlySet<string> = new Set([
   "ordinals_p2p_my_trades",
   "bounty_my_posted",
   "bounty_my_submissions",
-  "bounty_pending_invites",
   // Pillar smart wallet: browser handoff session, Pillar key or active wallet
   "pillar_connect",
   "pillar_disconnect",
